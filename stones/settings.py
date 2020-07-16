@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-AUTH_USER_MODEL = 'diamondtrails.User'
+# AUTH_USER_MODEL = 'diamondtrails.User'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -84,20 +84,21 @@ WSGI_APPLICATION = 'stones.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "tml-base",
+        "USER": "postgres",
+        "PASSWORD": "cGztxxcuCiCrFMro",
+        "PORT": "5432",
     }
 }
 
-DATABASES['default']['HOST'] = 'connection-name-here'
+
+DATABASES['default']['HOST'] = "/cloudsql/trailmix-base:us-west1:tml-base"
 if os.getenv('GAE_INSTANCE'):
     pass
 else:
-    DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES['default']['HOST'] = "127.0.0.1"
 # [END dbconfig]
 
 
@@ -137,6 +138,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'https://storage.googleapis.com/tml-static/static/'
 
 STATIC_ROOT = 'static/'
