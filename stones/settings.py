@@ -86,12 +86,22 @@ WSGI_APPLICATION = 'stones.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "tml-base",
-        "USER": "postgres",
-        "PASSWORD": "cGztxxcuCiCrFMro",
+        "NAME": "tmlive",
+        "USER": "tmliveadmin",
+        "PASSWORD": "trailmixlive",
         "PORT": "5432",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "trailmix",
+#         "USER": "trailmixadmin",
+#         "PASSWORD": "trailmixlive",
+#         "PORT": "5432",
+#     }
+# }
 
 
 DATABASES['default']['HOST'] = "/cloudsql/trailmix-base:us-west1:tml-base"
