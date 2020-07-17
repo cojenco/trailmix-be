@@ -84,28 +84,28 @@ WSGI_APPLICATION = 'stones.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 ### For DEPLOYMENT ###
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "tmlive",
-#         "USER": "tmliveadmin",
-#         "PASSWORD": "trailmixlive",
-#         "PORT": "5432",
-#     }
-# }
-### For DEPLOYMENT ###
-
-
-### For LOCAL testing ###
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "tmlive",
         "USER": "tmliveadmin",
         "PASSWORD": "trailmixlive",
-        "PORT": "3306",
+        "PORT": "5432",
     }
 }
+### For DEPLOYMENT ###
+
+
+### For LOCAL testing ###
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "tmlive",
+#         "USER": "tmliveadmin",
+#         "PASSWORD": "trailmixlive",
+#         "PORT": "3306",
+#     }
+# }
 ### For LOCAL testing ###
 
 

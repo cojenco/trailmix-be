@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+import datetime
 # Create your models here.
 
 # class UserManager(BaseUserManager):
@@ -62,6 +63,9 @@ class Subscription(models.Model):
     external_id = models.BigIntegerField()
     phone = models.CharField(max_length = 15)
     trail = models.CharField(max_length = 150)
+
+    def subscribed_recently(self):
+      return self.created_at >= timezone.now() - datetime.timedelta(hours=72)
 
 
 class USstate(models.Model):

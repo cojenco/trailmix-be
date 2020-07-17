@@ -5,7 +5,8 @@ from .models import StatusUpdate, Subscription, USstate
 from .serializers import UpdateSerializer
 import requests
 import datetime
-
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -38,8 +39,8 @@ def trailDetail(request, external_id):
   r = requests.get(url, params=payload).json()
 
   # Filter DB to get subscribers 
-  ### YET: FILTER CREATED AT WITHIN 72 HOURS
-  subs = Subscription.objects.filter(external_id = external_id).count()
+  ### FILTER CREATED AT WITHIN 72 HOURS
+  subs = Subscription.objects.filter(external_id = external_id, created_at__gte=timezone.now()-timedelta(hours=72)).count()
   # Filter DB to get weather udpates
   weather_updates = StatusUpdate.objects.filter(external_id = external_id, category = 'Weather').order_by('-created_at')
   weather_serializers = UpdateSerializer(weather_updates, many=True)
@@ -59,7 +60,7 @@ def trailDetail(request, external_id):
   r['parking_updates'] = parking_stats
   r['visitor_updates'] = visitor_stats
 
-  print(r)
+  # print(r)
 
   return Response(r)
 
@@ -93,12 +94,13 @@ def allTrails(request, state_name):
 def liveUpdate(request, external_id):
   # create a StatusUpdate instance and save
   print('Yay! Made it here!')
-  print(request.data)
+  # print(request.data)
 
   category = request.data["category"]
   message = request.data["message"]
-  current_time = datetime.datetime.now()
-  now = str(current_time)
+  # current_time = datetime.datetime.now()
+  # now = str(current_time)
+  # print(current_time)
 
   new_status = StatusUpdate(
   external_id = external_id,
@@ -109,33 +111,34 @@ def liveUpdate(request, external_id):
   new_status.save()
 
   # Filter DB: Subscriptions with that trail (external_id == external_id)
-  # YET TO DO: FILTER SUBSCRIBERS FOR THE LAST 72 HOURS
-  subs = Subscription.objects.filter(external_id = external_id)
+  # FILTER SUBSCRIBERS FROM THE LAST 24 HOURS TP SEND SMS
+  subs = Subscription.objects.filter(external_id = external_id, created_at__gte=timezone.now()-timedelta(hours=24))
   print('Looking for subscribers')
 
   # Send out text messages to alert subscribers
   for sub in subs:
-    print(sub.phone)
-    print(sub.trail)
+    # print(sub.phone)
+    # print(sub.trail)
     # IMPORTANT DO NOT DELETE
-    # phone = sub.phone
-    # trail = sub.trail
+    phone = sub.phone
+    trail = sub.trail
     # content = "TRAIL MIX LIVE! " + category + ": " + message + ". Location: " + trail + ". Last updated: " + now
-    # url = "https://quick-easy-sms.p.rapidapi.com/send"
+    content = "TRAIL MIX LIVE! " + category + ": " + message + ". Location: " + trail
+    url = "https://quick-easy-sms.p.rapidapi.com/send"
 
-    # payload = {
-    #   'message': content,
-    #   'toNumber': phone,
-    # }
+    payload = {
+      'message': content,
+      'toNumber': phone,
+    }
 
-    # headers = {
-    #     'x-rapidapi-host': "quick-easy-sms.p.rapidapi.com",
-    #     'x-rapidapi-key': secrets.SMS_KEY,
-    #     'content-type': "application/x-www-form-urlencoded"
-    #     }
+    headers = {
+        'x-rapidapi-host': "quick-easy-sms.p.rapidapi.com",
+        'x-rapidapi-key': secrets.SMS_KEY,
+        'content-type': "application/x-www-form-urlencoded"
+        }
 
-    # sms_response = requests.post(url, params=payload, headers=headers)
-    # print(sms_response.text)
+    sms_response = requests.post(url, params=payload, headers=headers)
+    print(sms_response.text)
     # IMPORTANT DO NOT DELETE
 
   return Response(request.data)
@@ -146,7 +149,7 @@ def liveUpdate(request, external_id):
 def subscribe(request, external_id):
   # create a StatusUpdate instance and save
   print('Yay! Made it here!')
-  print(request.data)
+  # print(request.data)
 
   phone = "1" + request.data['phone']
   trail = request.data['trail']
