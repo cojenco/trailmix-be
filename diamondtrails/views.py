@@ -163,3 +163,27 @@ def subscribe(request, external_id):
   new_sub.save()
 
   return Response(request.data)
+
+
+##### Trails Nearby: Retrieve 10 trails nearby from coordinates #####
+@api_view(['GET'])
+def trailsNearby(request):
+  url = 'https://www.hikingproject.com/data/get-trails'
+
+  lat = request.query_params.get('lat')
+  lng = request.query_params.get('lng')
+  # print(lat)
+  # print(lng)
+
+  payload = {
+      'key': secrets.HP_API_KEY,
+      'lat': lat,
+      'lon': lng, 
+      'maxDistance': '100',
+      'maxResults': '10',
+  }
+
+  external_results = requests.get(url, params=payload).json()
+  print('YAY! Successfully retrieved trails nearby')
+
+  return Response(external_results)    

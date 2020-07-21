@@ -9,5 +9,5 @@ urlpatterns = [
     path('all-trails/<str:state_name>', views.allTrails, name='all-trails'),
     path('trail/<str:external_id>/live-update', views.liveUpdate, name='live-update'),
     path('trail/<str:external_id>/subscribe', views.subscribe, name='subscribe'),
-    # path('all-trails/', views.allTrails, name='all-trails'),
+    path('trails-nearby', views.trailsNearby, name='trails-nearby')
 ]
