@@ -179,7 +179,7 @@ def trailsNearby(request):
       'key': secrets.HP_API_KEY,
       'lat': lat,
       'lon': lng, 
-      'maxDistance': '100',
+      'maxDistance': '35',
       'maxResults': '10',
   }
 
